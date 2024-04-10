@@ -4,8 +4,8 @@ Created on 2022-09-01
 @author: wf
 """
 import aiohttp
-# from jpcore.justpy_app import JustpyServer
-from jpcore.f1 import JustpyServer
+from jpcore.justpy_app import JustpyServer
+# from jpcore.f1 import JustpyServer
 from tests.basetest import Basetest, Profiler
 from unittest import IsolatedAsyncioTestCase
 

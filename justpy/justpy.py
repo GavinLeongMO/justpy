@@ -27,7 +27,7 @@ from .routing import SetRoute
 from jpcore.utilities import run_task, create_delayed_task
 import uvicorn, logging, sys, os, traceback
 import typing
-from jpcore.f2 import f1
+from jpcore.mytest_page import homepage
 
 from importlib import import_module
 #
@@ -267,7 +267,7 @@ def justpy(
     print("abc")
     print(PORT)
     if func:
-        func_to_run = f1
+        func_to_run = homepage
     else:
         func_to_run = initial_func
     if startup:

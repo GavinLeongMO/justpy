@@ -1,7 +1,7 @@
 import asyncio
 import psutil
 from multiprocessing import Process
-from jpcore.f2 import f1
+from jpcore.mytest_child import entry_point
 
 class JustpyServer:
     """
@@ -79,7 +79,7 @@ class JustpyServer:
             }
             kwargs = {**needed_kwargs, **kwargs}
             self.proc = Process(
-                target=f1,
+                target=jp.justpy,
                 args=("hi",),
                 kwargs=kwargs,
             )

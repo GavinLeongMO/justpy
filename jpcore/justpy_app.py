@@ -36,7 +36,7 @@ from jpcore.template import Context
 from jpcore.webpage import WebPage
 from itsdangerous import Signer
 
-from jpcore.f1 import f1
+from jpcore.mytest_child import entry_point
 # typing shorthand notations
 WebPage_or_Response = typing.Union[typing.Union[WebPage, Response], typing.Awaitable[typing.Union[WebPage, Response]]]
 Jp_Route_Callback = typing.Union[
@@ -603,8 +603,7 @@ class JustpyServer:
             kwargs:
         """
         # this import is actually calling code ...
-        # import justpy as jp
-        jp=None
+        import justpy as jp
 
         if self.mode == "direct":
             jp.justpy(
@@ -627,14 +626,15 @@ class JustpyServer:
             }
             kwargs = {**needed_kwargs, **kwargs}
             self.proc = Process(
-                # target=jp.justpy,
-                target=f1,
-                args=(wpfunc,),
+                target=jp.justpy,
+                # target=entry_point,
+                args=("hi",),
+                # args=(wpfunc,),
                 kwargs=kwargs,
             )
             self.proc.daemon = True
             self.proc.start()
-        await asyncio.sleep(self.sleep_time)  # time for the server to start
+        await asyncio.sleep(10)  # time for the server to start
 
     async def stop(self):
         """
