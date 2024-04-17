@@ -26,19 +26,13 @@ class TestJustpyCore(BaseAsynctest):
     # async def setUp(self):
     #     await BaseAsynctest.setUp(self, port=8122, debug=True)
 
-    async def wp_to_test(self):
-        """
-        the example Webpage under test
-        """
-        wp = jp.WebPage()
-        _d = jp.Div(a=wp)
-        return wp
 
     async def testWp(self):
         """'
         test the webpage asynchronously
         """
-        await self.server.start(self.wp_to_test)
+        #self.wp_to_test
+        await self.server.start("tests.test_justpy_core:wp_to_test")
         status, rawhtml = await self.getResponseHtml()
         self.assertEqual(200, status)
         html = rawhtml.decode("utf8")
@@ -48,3 +42,11 @@ class TestJustpyCore(BaseAsynctest):
             tmp=tempfile.NamedTemporaryFile(mode="w+t",delete=True)
             tmp.write(html)
             tmp.close()
+
+async def wp_to_test():
+    """
+    the example Webpage under test
+    """
+    wp = jp.WebPage()
+    _d = jp.Div(a=wp)
+    return wp

@@ -58,7 +58,7 @@ class Demostarter(ExampleManager):
             example_json = json.load(json_file)
         if "examples" in example_json:
             for i, video_record in enumerate(example_json["examples"]):
-                name=video_record.get("name",None)
+                name=video_record.get("name",None).replace("/",os.path.sep)
                 video_url=video_record.get("video_url",None)
                 if name and video_url:
                     if name in self.demos_by_source_file:

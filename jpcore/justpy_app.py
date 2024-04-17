@@ -36,7 +36,6 @@ from jpcore.template import Context
 from jpcore.webpage import WebPage
 from itsdangerous import Signer
 
-from jpcore.mytest_child import entry_point
 # typing shorthand notations
 WebPage_or_Response = typing.Union[typing.Union[WebPage, Response], typing.Awaitable[typing.Union[WebPage, Response]]]
 Jp_Route_Callback = typing.Union[
@@ -614,7 +613,7 @@ class JustpyServer:
                 websockets=websockets,
                 kwargs=kwargs,
             )
-            await asyncio.sleep(self.sleep_time)  # time for the server to start
+            await asyncio.sleep(self.sleep_time) 
             self.server = jp.get_server()
             self.thread = Thread(target=self.server.run)
             self.thread.start()
@@ -627,14 +626,12 @@ class JustpyServer:
             kwargs = {**needed_kwargs, **kwargs}
             self.proc = Process(
                 target=jp.justpy,
-                # target=entry_point,
-                args=("hi",),
-                # args=(wpfunc,),
+                args=(wpfunc,),
                 kwargs=kwargs,
             )
             self.proc.daemon = True
             self.proc.start()
-        await asyncio.sleep(10)  # time for the server to start
+        await asyncio.sleep(5)  # time for the server to start
 
     async def stop(self):
         """
