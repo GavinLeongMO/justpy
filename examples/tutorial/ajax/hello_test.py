@@ -9,4 +9,5 @@ def hello_test():
 
 # initialize the demo
 from  examples.basedemo import Demo
-Demo ("hello_test",hello_test, websockets=False)
+if __name__=='__main__':
+    Demo ("hello_test",hello_test, websockets=True)
