@@ -9,6 +9,8 @@ from jpcore.justpy_app import JustpyServer
 from tests.basetest import Basetest, Profiler
 from unittest import IsolatedAsyncioTestCase
 from async_timeout import timeout
+from asyncio import sleep
+import time
 
 class BaseAsynctest(IsolatedAsyncioTestCase):
     """
@@ -78,10 +80,17 @@ class BaseAsynctest(IsolatedAsyncioTestCase):
         Returns:
             status,rawhtml
         """
-        session_timeout = aiohttp.ClientTimeout(total=30,sock_connect=10,sock_read=10)
-        async with aiohttp.ClientSession(timeout=session_timeout) as session:
-            url = self.getUrl(path)
-            async with session.get(url) as resp:
-                rawhtml = await resp.content.read()
-                status = resp.status
-        return status, rawhtml
+        n=time.time()
+        while True:
+            try:
+                async with aiohttp.ClientSession() as session:
+                    url = self.getUrl(path)
+                    async with session.get(url) as resp:
+                        rawhtml = await resp.content.read()
+                        status = resp.status
+                return status, rawhtml
+            except Exception as ex:
+                if (time.time()-n)<=5:
+                    await sleep(0.01)
+                else:
+                    raise ex

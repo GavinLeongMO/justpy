@@ -30,7 +30,7 @@ class TutorialManager:
         self.tutorials={}
         self.script_dir = os.path.dirname(__file__)
         if docs_dir is None:
-            docs_dir = f"{os.path.dirname(self.script_dir)}/docs"
+            docs_dir = f"{os.path.dirname(self.script_dir)}{os.path.sep}docs"
         self.docs_dir=docs_dir
         self.total_lines=0
         self.total_examples=0
@@ -86,11 +86,11 @@ class Tutorial():
         self.docs_dir=docs_dir
         self.name=path.replace(docs_dir+os.path.sep,"")
         self.tutorial_path=self.name.replace(".md","")
-        self.tutorial_url=f"https://justpy.io/{self.tutorial_path}"
+        self.tutorial_url=f"https://justpy.io/{self.tutorial_path.replace(os.path.sep,'/')}"
         self.github_url=f"https://github.com/justpy-org/justpy/blob/master/docs/{self.name}"
         with codecs.open(self.path, "r", "UTF-8") as markup_file:
             self.markup = markup_file.read()
-        self.lines=self.markup.split("\n")
+        self.lines=self.markup.splitlines()
         header=None
         python_code=[]
         in_python_code=False
@@ -103,7 +103,7 @@ class Tutorial():
                 in_python_code=False
                 continue
             if not in_python_code:
-                header_match= re.search("^#+\s*(.*)",line)
+                header_match= re.search(r"^#+\s*(.*)",line)
                 if header_match:
                     header=header_match.group(1)
                     header=header.strip()
@@ -111,12 +111,12 @@ class Tutorial():
             else:
                 python_code.append(line)
                 justpy_match = re.search(
-                    """^(jp[.])?justpy[(]([a-zA-Z_0-9]*)([,]\s*(.*))?[)]([#].*)?""", line
+                    r"""^(jp[.])?justpy[(]([a-zA-Z_0-9]*)([,]\s*(.*))?[)]([#]([a-zA-Z_0-9]*))?""", line
                 )
                 if justpy_match:
                     example_name = justpy_match.group(2)
                     example_option=justpy_match.group(4)
-                    example_comment=justpy_match.group(5)
+                    example_comment=justpy_match.group(6)
                     if not example_name:
                         example_name=example_comment
                         pass
@@ -165,11 +165,11 @@ class Tutorial():
         if not example_name in self.examples:
             raise Exception(f"{example_name} is not part of tutorial {self}")   
         example=self.examples[example_name]
-        if not target_path.endswith("/"):
-            target_path+="/"
+        if not target_path.endswith(os.path.sep):
+            target_path+=os.path.sep
         base_path=f"{target_path}{self.tutorial_path}"
         os.makedirs(base_path, exist_ok=True)
-        source_target_path=f"{base_path}/{example_name}.py"
+        source_target_path=f"{base_path}{os.path.sep}{example_name}.py"
         if verbose:
             print(f"{prefix}{example_name}:{example}",end="")
         header=f"""# see {self.github_url}

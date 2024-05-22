@@ -56,7 +56,7 @@ class ExampleSource:
         """
         with codecs.open(path, "r", "UTF-8") as source_file:
             self.source = source_file.read()
-        self.lines=self.source.split("\n")
+        self.lines=self.source.splitlines()
         
     @classmethod
     def of_path(cls,path:str):

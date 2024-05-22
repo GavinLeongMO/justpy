@@ -262,16 +262,22 @@ def justpy(
     jpconfig.PORT = port
     HOST = host
     PORT = port
+    print("abc")
+    print(port)
+    traceback.print_stack()
     if func:
         if isinstance(func,str):
-            a=func.split(":")
-            func_to_run = getattr(import_module(a[0]),a[1])
+            if ":" in func:
+                module_name=func.split(":")
+                func_to_run = getattr(import_module(module_name[0]),module_name[1])
+            else:
+                raise Exception("wpfunc format incorrect: 'module_name:function'")
         else:
             func_to_run = func
     else:
         func_to_run = initial_func
     if startup:
-        startup_func = startup
+        startup_func = startup 
     if websockets:
         WebPage.use_websockets = True
     else:

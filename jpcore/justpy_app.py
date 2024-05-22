@@ -631,7 +631,7 @@ class JustpyServer:
             )
             self.proc.daemon = True
             self.proc.start()
-        await asyncio.sleep(5)  # time for the server to start
+        # await asyncio.sleep(5)  # time for the server to start
 
     async def stop(self):
         """

@@ -7,6 +7,8 @@ from tests.basetest import Basetest
 from jpcore.tutorial import TutorialManager
 from jpcore.demostarter import Demostarter
 from jpcore.example import ExampleSource
+import tempfile
+import os
 
 class TestTutorial(Basetest):
     """
@@ -80,28 +82,31 @@ class TestTutorial(Basetest):
         test updating an example from the tutorial source
         """
         debug=self.debug
-        #debug=True
-        #debug=False
-        for example_name in ["stock_test2"]:
-            target_path=f"/tmp/{example_name}.py"
-            demo=self.ds.demos_by_name[example_name]
-            tutorial_example=self.tm.examples_by_name[example_name]
-            demo.update_from_tutorial_example(tutorial_example=tutorial_example,target_path=target_path)
-            update_source=ExampleSource(description=f"test for {example_name}.py") 
-            update_source.read_source(target_path)
-            if debug:
-                for i,line in enumerate(update_source.lines):
-                    print (f"{i+1:3} {line}")
-            problems=demo.same_as_tutorial(update_source,debug=debug) 
-            if debug:
-                self.show_problems(problems)       
-            self.assertEqual(0,len(problems))
+        for example_name in ["stock_test2"]:           
+            tmp=tempfile.NamedTemporaryFile(mode="w+t", delete=False)
+            try:
+                target_path=tmp.name
+                tmp.close()
+                demo=self.ds.demos_by_name[example_name]
+                tutorial_example=self.tm.examples_by_name[example_name]
+                demo.update_from_tutorial_example(tutorial_example=tutorial_example,target_path=target_path)
+                update_source=ExampleSource(description=f"test for {example_name}.py") 
+                update_source.read_source(target_path)
+                if debug:
+                    for i,line in enumerate(update_source.lines):
+                        print (f"{i+1:3} {line}")
+                problems=demo.same_as_tutorial(update_source,debug=debug) 
+                if debug:
+                    self.show_problems(problems)       
+                self.assertEqual(0,len(problems))
+            finally:
+                os.remove(target_path)
             
     def test_tutorial_extract(self):
         """
         test extracting tutorial code
         """
-        self.tm.extract_all("/tmp/")
+        self.tm.extract_all(r"C:\Users\wc018\New")
         # @TODO - check the diff of the extraction
         
     def test_tutorial_diff(self):

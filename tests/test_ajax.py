@@ -22,11 +22,11 @@ class TestAjaxWithSelenium(BaseSeleniumTest):
         """
         WebPage.use_websockets=False
         self.browser = await self.getBrowserForDemo()
-        from examples.tutorial.ajax.hello_test import hello_test
-        await self.server.start(hello_test,websockets=False)
+        await self.server.start("examples.tutorial.ajax.hello_test:hello_test",websockets=False)
         url = self.server.get_url("/")
+        await asyncio.sleep(10)
         self.browser.get(url)
-        await asyncio.sleep(self.server.sleep_time)
+        # await asyncio.sleep(self.server.sleep_time)
         divs = self.browser.find_elements(By.TAG_NAME, "div")
         for div in divs:
             div.click()
