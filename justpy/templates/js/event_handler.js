@@ -190,7 +190,7 @@ class EventHandler {
                     if (msg) {
                         // replace my components with the data in the message
                         // this is where the whole page is rebuilt
-                        app1.justpyComponents = msg.data;
+                        app1._instance.data.justpyComponents = msg.data;
                     }
                 },
                 dataType: 'json'

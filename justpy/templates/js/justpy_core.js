@@ -19,7 +19,6 @@ var msg = null; // declare msg - beware aggrid also does this!
 let reload_timeout = 2000;
 let reload_started = false;
 
-
 /**
  * Non-object-oriented legacy functions
  */
@@ -158,6 +157,14 @@ class JustpyCore {
 		document.title = title;
 		this.title = title;
 	}
+	
+	updateEventHandler(justpyComponents) {
+		let that = this;
+		for (let e of justpyComponents) {
+			if (!e.eventHandler) {
+				e.eventHandler=that.eventHandler.handle.bind(that.eventHandler) }
+		}
+	}
 
 	/**
 	 * setup the core functionality
@@ -169,10 +176,8 @@ class JustpyCore {
 			this.setupNoWebSocket();
 		}
 		let that = this;
+		this.updateEventHandler(justpyComponents);
 		for (let e of justpyComponents) {
-			if (!e.eventHandler) {
-				e.eventHandler=that.eventHandler.handle.bind(that.eventHandler)
-			}
 			if (e.scoped_slots!={}) {
 				for (let f in e.scoped_slots) {
 					e.scoped_slots[f].eventHandler=that.eventHandler.handle.bind(that.eventHandler)
@@ -252,7 +257,8 @@ class JustpyCore {
 				break;
 			case 'component_update':
 				// update just specific component on the page
-				comp_replace(msg.data, this.app1.justpyComponents);
+				this.updateEventHandler(msg.data)
+				comp_replace(msg.data, this.app1._instance.data.justpyComponents);
 				break;
 			case 'run_javascript':
 				this.handleRunJavascriptEvent(msg);
@@ -313,7 +319,8 @@ class JustpyCore {
 			}
 			document.getElementsByTagName('head')[0].appendChild(link);
 		}
-		this.app1.justpyComponents = msg.data;
+		this.updateEventHandler(msg.data)
+		this.app1._instance.data.justpyComponents = msg.data;
 	}
 
 	/**
@@ -465,7 +472,8 @@ class JustpyCore {
 						'event_data': { 'event_type': 'page_update', 'page_id': this.page_id }
 					}),
 					success: function(msg) {
-						if (msg) this.app1.justpyComponents = msg.data;
+						this.updateEventHandler(msg.data)
+						if (msg) this.app1._instance.data.justpyComponents = msg.data;
 					},
 					dataType: 'json'
 				});

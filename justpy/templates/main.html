@@ -9,5 +9,6 @@
 import {JustpyCore} from '/templates/js/justpy_core.js';
     {%- if context_obj %}
     {{ context_obj.as_html_lines() | safe }}
+    window.core=justpy_core
     {% endif %}
 </script>

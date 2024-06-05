@@ -13,6 +13,9 @@ function register_html_component(app) {
 
             for (var i = 0; i < this.jp_props.object_props.length; i++) {
                 if (this.jp_props.object_props[i].show) {
+                    if (!this.jp_props.object_props[i].eventHandler) {
+                        this.jp_props.object_props[i].eventHandler=this.jp_props.eventHandler;
+                    }
                     comps.push(Vue.h(this.jp_props.object_props[i].vue_type, {                        
                             jp_props: this.jp_props.object_props[i]                        
                     }))

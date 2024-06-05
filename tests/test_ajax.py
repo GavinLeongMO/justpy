@@ -7,6 +7,7 @@ import asyncio
 from selenium.webdriver.common.by import By
 from tests.base_selenium_test import BaseSeleniumTest
 from jpcore.webpage import WebPage
+import justpy as jp
 
 class TestAjaxWithSelenium(BaseSeleniumTest):
     """
